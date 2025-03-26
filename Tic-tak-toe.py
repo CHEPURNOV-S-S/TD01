@@ -9,6 +9,13 @@ current_player = "X"
 buttons = []
 
 
+def is_draw():
+    for but_row in buttons:
+        for cur_btn in but_row:
+            if cur_btn["text"] == "":
+                return False
+    return True
+
 def check_winner():
    for i in range(3):
        if buttons[i][0]["text"] == buttons[i][1]["text"] == buttons[i][2]["text"] != "":
@@ -33,9 +40,13 @@ def on_click(row, col):
    buttons[row][col]['text'] = current_player
 
    if check_winner():
-       messagebox.showinfo("Игра окончена",f"Игрок {current_player} победил!")
-
-   current_player = "0" if current_player == "X" else "X"
+       messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
+       window.quit()
+   elif is_draw():
+       messagebox.showinfo("Игра окончена", "Ничья!")
+       window.quit()
+   else:
+       current_player = "0" if current_player == "X" else "X"
 
 
 for i in range(3):
