@@ -23,6 +23,13 @@ def check_winner():
 
    return False
 
+# Функция сброса игры
+def reset_game():
+    global current_player
+    current_player = "X"  # Сбрасываем текущего игрока
+    for btn_row in buttons:
+        for cur_btn in btn_row:
+            cur_btn["text"] = ""  # Очищаем текст на всех кнопках
 
 def on_click(row, col):
    global current_player
@@ -34,6 +41,7 @@ def on_click(row, col):
 
    if check_winner():
        messagebox.showinfo("Игра окончена",f"Игрок {current_player} победил!")
+       reset_game()
 
    current_player = "0" if current_player == "X" else "X"
 
@@ -46,6 +54,9 @@ for i in range(3):
        row.append(btn)
    buttons.append(row)
 
+# Кнопка перезапуска игры
+reset_button = tk.Button(window, text="Перезапуск", font=("Arial", 14), command=reset_game)
+reset_button.grid(row=3, column=0, columnspan=3, pady=10)
 
 window.mainloop()
 
