@@ -5,7 +5,7 @@ window = tk.Tk()
 window.title("Крестики-нолики")
 window.geometry("300x450")
 
-current_player = "X"
+current_player = "X"  # По умолчанию первый игрок - X
 buttons = []
 score_X = 0
 score_O = 0
@@ -40,16 +40,15 @@ def check_winner():
 
     return False
 
-def reset_game(full_reset = False):
+def reset_game(full_reset=False):
     global current_player
-
-    global score_X
-    global score_O
+    global score_X, score_O
     if full_reset:
+        choose_first_player()  # Выбор первого игрока перед началом новой игры
         score_X = 0
         score_O = 0
-        current_player = "X"  # Сбрасываем текущего игрока
         update_score()
+
     for btn_row in buttons:
         for cur_btn in btn_row:
             cur_btn["text"] = ""  # Очищаем текст на всех кнопках
@@ -81,7 +80,7 @@ def reset_series():
     score_X = 0
     score_O = 0
     update_score()
-    reset_game()
+    reset_game(True)
 
 def on_checkbox_change():
     if play_until_three_wins.get():  # Если флажок активирован
@@ -90,6 +89,14 @@ def on_checkbox_change():
         print("Режим 'до трёх побед' выключен")
     reset_game(True)  # Вызываем сброс игры
 
+def choose_first_player():
+    global current_player
+    choice = messagebox.askquestion("Выбор первого игрока", "Кто будет ходить первым? (Да = X, Нет = O)")
+    if choice == "yes":
+        current_player = "X"
+    else:
+        current_player = "O"
+    print(f"Первый ходит: {current_player}")
 
 def on_click(row, col):
     global current_player
@@ -119,7 +126,7 @@ for i in range(3):
     buttons.append(row)
 
 # Кнопка перезапуска игры
-reset_button = tk.Button(window, text="Перезапуск", font=("Arial", 14),  command=lambda: reset_game(True))
+reset_button = tk.Button(window, text="Перезапуск", font=("Arial", 14), command=lambda: reset_game(True))
 reset_button.grid(row=3, column=0, columnspan=3, pady=10)
 
 # Флажок для режима "до трёх побед"
@@ -128,5 +135,8 @@ three_wins_checkbox = tk.Checkbutton(window,
                                      variable=play_until_three_wins,
                                      command=on_checkbox_change)
 three_wins_checkbox.grid(row=5, column=0, columnspan=3, pady=10)
+
+# Выбор первого игрока перед началом игры
+choose_first_player()
 
 window.mainloop()
